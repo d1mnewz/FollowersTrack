@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowersTrack", "FollowersTrack\FollowersTrack.csproj", "{AED8F867-D56C-4255-8AAA-CD6812AB47AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollowersTrack_Console", "FollowersTrack_Console\FollowersTrack_Console.csproj", "{62074858-8B0A-4E49-8ADF-FAACB6CD8EAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{AED8F867-D56C-4255-8AAA-CD6812AB47AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AED8F867-D56C-4255-8AAA-CD6812AB47AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AED8F867-D56C-4255-8AAA-CD6812AB47AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62074858-8B0A-4E49-8ADF-FAACB6CD8EAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62074858-8B0A-4E49-8ADF-FAACB6CD8EAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62074858-8B0A-4E49-8ADF-FAACB6CD8EAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62074858-8B0A-4E49-8ADF-FAACB6CD8EAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
