@@ -10,65 +10,143 @@ using VkNet.Utils;
 using VkNet.Model;
 using System.Timers;
 using VkNet.Enums.Filters;
+using System.Threading;
 
 namespace FollowersTrack
 {
     public class State
     {
-        public DateTime Checked;
-        public VkCollection<User> followers;
+        //public DateTime Checked;
+        public VkCollection<User> followers = null;
+        public List<long> followersIDs = new List<long>();
+        public List<long> NewFollowersIDs = new List<long>();
+        public List<long> UnFollowedIDs = new List<long>();
+        public State()
+        {
+
+        }
     }
     public class VK_Tracker
     {
-        public State last;
+        public State last = null;
         private static VkApi _api;
-        
+
         public static String CommunityScreenName = ConfigurationManager.AppSettings["CommunityID"];
-        
-        public Timer timer;
+
+        public System.Timers.Timer timer;
+        public void ShowUnfollows()
+        {
+            if (this.last.UnFollowedIDs.Count > 0)
+            {
+                Logger.WriteLog(String.Format(" Current: {0} -Unfollow: ", this.last.followersIDs.Count));
+                //Console.WriteLine("Unfollows");
+
+                foreach (var el in last.UnFollowedIDs)
+                {
+                    User userModel = _api.Users.Get(el, null, null, true);
+
+
+                    Logger.WriteLog(userModel.FirstName + " " + userModel.LastName + " ID " + userModel.Id);
+                }
+
+
+            }
+        }
+
+        public void ShowNewFollows()
+        {
+            if (this.last.NewFollowersIDs.Count > 0)
+            {
+                Logger.WriteLog(String.Format(" Current: {0}  +Follow: ", this.last.followersIDs.Count));
+                foreach (var el in last.NewFollowersIDs)
+                {
+                    User userModel = _api.Users.Get(el, null, null, true);
+
+
+                    Logger.WriteLog(userModel.FirstName + " " + userModel.LastName + " ID " + userModel.Id);
+                }
+
+
+            }
+        }
+
+        public void GetNewState()
+        {
+            State newState = new State();
+
+            newState.followers = _api.Groups.GetMembers(
+                new GroupsGetMembersParams
+                { GroupId = CommunityScreenName },
+                true);
+            newState.followersIDs = newState.followers.Select(x => x.Id).ToList();
+
+
+
+            //newState.Checked = DateTime.Now;
+            //newState.NewFollowers = newState.followers.Concat(last.followers).Distinct(o => o.);
+            // Console.WriteLine("Check state at " + DateTime.Now );
+            //foreach (var el in newState.followers)
+            //{
+            //    ...Console.WriteLine(el);
+            //}
+
+            if (last.followersIDs.Count > 0)
+            {
+                newState.UnFollowedIDs = last.followersIDs.Except(newState.followersIDs).ToList();
+                newState.NewFollowersIDs = newState.followersIDs.Except(last.followersIDs).ToList();
+                ShowNewFollows();
+                ShowUnfollows();
+            }
+            last = newState;
+            timer.Start();
+
+
+
+            
+            
+
+
+
+
+
+
+
+        }
+
+
+
+
         public VK_Tracker()
         {
-            CheckCurrentState();
-            timer = new Timer(5 * 60 * 60 * 1000); // every 5 hours
+            //CheckCurrentState();
+            last = new State();
+            timer = new System.Timers.Timer(60 * 60 * 6000); // every hour
             timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
             _api = new VkApi();
+            Logger.WriteLog("Started;  Target:" + CommunityScreenName);
+            timer.Start();
             
         }
-        
+
         private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             // ignore the time, just compare the date
-            if (last.Checked.Date < DateTime.Now.Date)
-            {
-                // stop the timer while we are running the cleanup task
-                timer.Stop();
-                CheckCurrentState();
-                //
-                // do cleanup stuff
-                //
-                
-                timer.Start();
-            }
-        }
-        public void CheckCurrentState()
-        {
-            
-            last.followers = _api.Groups.GetMembers(new GroupsGetMembersParams { GroupId = CommunityScreenName }, true);
-            if (last.followers.Count > 0)
-            {
-                foreach (var el in last.followers)
-                {
-                    Logger.WriteLog(String.Format("UserID {0}, Name {1} {2}", el.Id, el.FirstName, el.LastName));
+            //if (last.Checked.Date < DateTime.Now.Date)
+            //{
+            // stop the timer while we are running the cleanup task
+            timer.Stop();
+            GetNewState();
+            //
+            // do cleanup stuff
+            //
 
-                }
-            }
-            else
-                Logger.WriteLog("Some error occurred in CheckCurrentState()");
-
-            last.Checked = DateTime.Now;
-            
-            
+            timer.Start();
+            //}
         }
+
+
+
+
 
 
 

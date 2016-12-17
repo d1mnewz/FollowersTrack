@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace FollowersTrack
 {
-    public partial class Service1 : ServiceBase
+    public partial class FollowersTrackService : ServiceBase
     {
         public VK_Tracker Vk_track;
-        public Service1()
+        public FollowersTrackService()
         {
             InitializeComponent();
         }
@@ -22,9 +22,10 @@ namespace FollowersTrack
         {
             try
             {
-                Logger.WriteLog(DateTime.Now.ToString() + ": service started.");
+                
 
-                Vk_track.CheckCurrentState();
+                VK_Tracker vk_t = new VK_Tracker();
+                //vk_t.GetNewState();
             }
             catch { }
         }

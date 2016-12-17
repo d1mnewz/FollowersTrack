@@ -1,6 +1,6 @@
 ﻿namespace FollowersTrack
 {
-    partial class Service1
+    partial class FollowersTrackService
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.ServiceName = "Service1";
+            // 
+            // FollowersTrackService
+            // 
+            this.ServiceName = "FollowersVKTrack";
+
         }
 
         #endregion

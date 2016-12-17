@@ -34,19 +34,19 @@ namespace FollowersTrack
         public static String CommunityScreenName = ConfigurationManager.AppSettings["CommunityID"];
 
         public System.Timers.Timer timer;
-        public void GetNewFollowers()
-        {
-
-        }
         public void ShowUnfollows()
         {
             if (this.last.UnFollowedIDs.Count > 0)
             {
-                Console.WriteLine("Unfollows");
+                Console.Write(DateTime.Now.ToString() + " Current: {0} -Unfollow: ", this.last.followersIDs.Count);
+                //Console.WriteLine("Unfollows");
 
                 foreach (var el in last.UnFollowedIDs)
                 {
-                    Console.WriteLine(_api.Users.Get(el, null, null, true).FirstName);
+                    User userModel = _api.Users.Get(el, null, null, true);
+
+
+                    Console.WriteLine(userModel.FirstName + " " + userModel.LastName + " ID " + userModel.Id);
                 }
 
 
@@ -57,11 +57,13 @@ namespace FollowersTrack
         {
             if (this.last.NewFollowersIDs.Count > 0)
             {
-                Console.WriteLine("New Followers");
-
+                Console.Write(DateTime.Now.ToString() + " Current: {0}  +Follow: ", this.last.followersIDs.Count);
                 foreach (var el in last.NewFollowersIDs)
                 {
-                    Console.WriteLine(_api.Users.Get(el, null, null, true).FirstName);
+                    User userModel = _api.Users.Get(el, null, null, true);
+
+
+                    Console.WriteLine(userModel.FirstName + " " + userModel.LastName + " ID " +  userModel.Id);
                 }
 
 
@@ -82,7 +84,7 @@ namespace FollowersTrack
 
             newState.Checked = DateTime.Now;
             //newState.NewFollowers = newState.followers.Concat(last.followers).Distinct(o => o.);
-            Console.WriteLine("Check state at " + DateTime.Now );
+           // Console.WriteLine("Check state at " + DateTime.Now );
             //foreach (var el in newState.followers)
             //{
             //    ...Console.WriteLine(el);
@@ -121,6 +123,7 @@ namespace FollowersTrack
             timer = new System.Timers.Timer(10000); // every 5 hours
             timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
             _api = new VkApi();
+            Console.WriteLine("Started {0}; Target: {1}", DateTime.Now.ToString(), CommunityScreenName);
 
 
         }
