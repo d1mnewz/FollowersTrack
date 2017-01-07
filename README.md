@@ -1,6 +1,8 @@
 # FollowersTrack
 simple service to track new followers or unfollows on my VK public
 
+Target sets manually in app.config.
+
 It checks every 30 minutes by timer any changes in members of public (follow or unfollow). 
 
 And logs it into a LogFile.txt.
